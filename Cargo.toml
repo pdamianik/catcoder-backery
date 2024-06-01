@@ -1,0 +1,12 @@
+[package]
+name = "Backery"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.5.4", features = ["derive"] }
+owo-colors = "4.0.0"
+itertools = "0.13.0"
+log = "0.4.21"
+simple_logger = "5.0.0"
+enum-map = "2.7.3"
