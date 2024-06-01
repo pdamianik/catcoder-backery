@@ -1,3 +1,4 @@
+use std::str::FromStr;
 use enum_map::{Enum, EnumMap};
 use log::{debug, info};
 use owo_colors::OwoColorize;
@@ -16,6 +17,18 @@ const MAX_PAYMENTS: usize = 4;
 enum TransferType {
     Sale,
     Payment,
+}
+
+impl FromStr for TransferType {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "F" => Ok(TransferType::Sale),
+            "B" => Ok(TransferType::Payment),
+            _ => Err(format!("Unknown transfer type {}", s)),
+        }
+    }
 }
 
 #[derive(Debug, Eq, PartialEq)]
@@ -152,12 +165,6 @@ fn parse(exercise: &str) -> EnumMap<TransferType, Vec<Transfer>> {
     let mut elements = exercise.split(' ');
 
     while let Some(transfer_type) = elements.next() {
-        let transfer_type = match transfer_type {
-            "F" => TransferType::Sale,
-            "B" => TransferType::Payment,
-            _ => unreachable!(),
-        };
-
         let day = elements.next().unwrap().parse().unwrap();
         let amount = elements.next().unwrap().parse().unwrap();
 
@@ -166,7 +173,7 @@ fn parse(exercise: &str) -> EnumMap<TransferType, Vec<Transfer>> {
             amount,
         };
 
-        transfers[transfer_type].push(transfer);
+        transfers[transfer_type.parse().unwrap()].push(transfer);
     }
 
     transfers
